@@ -23,9 +23,6 @@ public class main extends AppCompatActivity {
 
     WebView myWebView;
     private static final String TAG = main.class.getSimpleName();
-    private Handler handler;
-    private Runnable runnable;
-    private int timeOutSec = 180;
 
     private class MyWebViewClient extends WebViewClient {
 
@@ -69,7 +66,6 @@ public class main extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setAppIdleTimeout();
         //Initialising Web View
         myWebView = (WebView) findViewById(R.id.webview);
         myWebView.loadUrl("http://appventure.nushigh.edu.sg");
@@ -117,59 +113,6 @@ public class main extends AppCompatActivity {
                         | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
                         | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
                         | View.SYSTEM_UI_FLAG_IMMERSIVE);
-    }
-
-    private void setAppIdleTimeout() {
-
-        handler = new Handler();
-        runnable = new Runnable() {
-
-            @Override
-            public void run() {
-                // TODO Auto-generated method stub
-                runOnUiThread(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        // Navigate to main activity
-                        Intent startMain = new Intent(Intent.ACTION_MAIN);
-                        startMain.addCategory(Intent.CATEGORY_HOME);
-                        startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(startMain);
-                        finish();
-                        overridePendingTransition(0,0);
-                    }
-                });
-            }
-        };
-        handler.postDelayed(runnable, timeOutSec * 1000);
-    }
-
-    //reset timer on user interaction and in onResume
-    public void resetAppIdleTimeout() {
-        handler.removeCallbacks(runnable);
-        handler.postDelayed(runnable, timeOutSec * 1000);
-    }
-
-    @Override
-    protected void onResume() {
-        // TODO Auto-generated method stub
-        super.onResume();
-        resetAppIdleTimeout();
-    }
-
-    @Override
-    public void onUserInteraction() {
-        // TODO Auto-generated method stub
-        resetAppIdleTimeout();
-        super.onUserInteraction();
-    }
-
-    @Override
-    public void onDestroy() {
-        // TODO Auto-generated method stub
-        handler.removeCallbacks(runnable);
-        super.onDestroy();
     }
 }
 
