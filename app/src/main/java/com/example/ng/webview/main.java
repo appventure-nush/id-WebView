@@ -23,6 +23,8 @@ public class main extends AppCompatActivity {
 
     WebView myWebView;
     private static final String TAG = main.class.getSimpleName();
+    private Handler handler;
+    private Runnable runnable;
     private int timeOutSec = 180;
 
     private class MyWebViewClient extends WebViewClient {
